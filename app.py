@@ -8,10 +8,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from fairlearn.metrics import MetricFrame, selection_rate, demographic_parity_difference, demographic_parity_ratio, equalized_odds_difference, true_positive_rate, false_positive_rate
 
-# -------------------------------
-# Utility Functions
-# -------------------------------
-
+#utility functions
 @st.cache_data
 def load_data():
     df = pd.read_csv("resume_cleaned.csv")
@@ -51,34 +48,27 @@ def fairness_metrics(y_true, y_pred, sensitive_features):
     eod = equalized_odds_difference(y_true, y_pred, sensitive_features=sensitive_features)
     return spd,di, eod
 
-# -------------------------------
-# Streamlit Layout
-# -------------------------------
-
+#streamlit layout
 st.set_page_config(page_title="FairHire Dashboard", layout="wide")
-st.title("🤖 FairHire: Mitigating Bias in Hiring Systems Dashboard")
+st.title("FairHire: Mitigating Bias in Hiring Systems Dashboard")
 
 # Sidebar Navigation
-page = st.sidebar.radio("📁 Navigate", ["About", "Train Model", "Evaluate & Bias Analysis", "Bias Mitigation"])
+page = st.sidebar.radio("Navigate", ["About", "Train Model", "Evaluate & Bias Analysis", "Bias Mitigation"])
 
-# -------------------------------
-# Page 1: About
-# -------------------------------
+# About page
 if page == "About":
     st.markdown("""
         ## Welcome to FairHire!
         This dashboard demonstrates bias detection and mitigation in AI-based resume screening.
         
-         - ✅ Train a Random Forest model on cleaned resume data.
-         - 📊 Analyze performance and fairness metrics.
-         - ⚖️ View demographic parity and equalized odds.
-         - 🛡️ Apply bias mitigation techniques.
+         - Train a Random Forest model on cleaned resume data.
+         - Analyze performance and fairness metrics.
+         - View demographic parity and equalized odds.
+         - Apply bias mitigation techniques.
     """)
     #st.image("https://miro.medium.com/v2/resize:fit:1200/1*EuhmXAoBNHvSk4HxVqGz-g.png", width=700)
 
-# -------------------------------
-# Page 2: Train Model
-# -------------------------------
+#Training page
 elif page == "Train Model":
     st.subheader("Train Resume Screening Model")
     df = load_data()
@@ -105,9 +95,7 @@ elif page == "Train Model":
         st.pyplot(plot_confusion_matrix(conf_mat))
 
 
-# -------------------------------
-# Page 3: Evaluate & Bias Analysis
-# -------------------------------
+#Evaluation page
 elif page == "Evaluate & Bias Analysis":
     st.subheader("Model Evaluation & Bias Metrics")
     model = load_model()
@@ -138,12 +126,7 @@ elif page == "Evaluate & Bias Analysis":
         }, y_true=y_test, y_pred=y_pred, sensitive_features=X_test[attr])
         st.dataframe(metric_frame.by_group)
 
-# -------------------------------
-# Page 4: Bias Mitigation (Optional Placeholder)
-# -------------------------------
-# -------------------------------
-# Page 4: Bias Mitigation (Demo)
-# -------------------------------
+#Bias Mitigation page
 elif page == "Bias Mitigation":
     st.subheader("Bias Mitigation Results")
     model = load_model()
